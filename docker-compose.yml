@@ -10,4 +10,24 @@ services:
       POSTGRES_USER: root
       POSTGRES_DB: boilerplate-api
     volumes:
-      - .docker-data/postgres:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - backend
+  team-api:
+    container_name: team-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    env_file:
+      - .env
+    networks:
+      - backend
+networks:
+    backend :
+volumes:
+  postgres:
+    name: api-db
