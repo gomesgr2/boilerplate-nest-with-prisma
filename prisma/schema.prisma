@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
-    binaryTargets = ["native"]
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -12,22 +12,36 @@ datasource db {
 }
 
 model User {
-  id    String      @id @default(uuid()) @map("user_id")
+  id    String @id @default(uuid()) @map("user_id")
   name  String
-  email String @unique 
-  photo    String
+  email String @unique
+  photo String
   teams Team[]
 
   @@map("user")
 }
 
 model Team {
-  id        String       @id @default(uuid()) @map("team_id")
-  name     String
-  photo    String
+  id          String   @id @default(uuid()) @map("team_id")
+  name        String
+  photo       String
+  country     String
   description String?
-  ownerId  String 
-  owner    User?    @relation(fields: [ownerId], references: [id])
+  ownerId     String
+  owner       User?    @relation(fields: [ownerId], references: [id])
+  players     Player[]
 
   @@map("team")
+}
+
+model Player {
+  id       String  @id @default(uuid()) @map("player_id")
+  name     String
+  photo    String
+  position String
+  country  String
+  teamId   String?
+  team     Team?   @relation(fields: [teamId], references: [id])
+
+  @@map("player")
 }
